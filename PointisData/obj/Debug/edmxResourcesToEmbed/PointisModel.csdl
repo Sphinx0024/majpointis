@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PointisModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Connexion">
+    <Key>
+      <PropertyRef Name="ConnexionID" />
+    </Key>
+    <Property Name="ConnexionID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employes">
+    <Key>
+      <PropertyRef Name="EmployeID" />
+    </Key>
+    <Property Name="EmployeID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Prenom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Sexe" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Pointage" Relationship="Self.FK_Pointage_Employes" FromRole="Employes" ToRole="Pointage" />
+  </EntityType>
+  <EntityType Name="Pointage">
+    <Key>
+      <PropertyRef Name="PointageID" />
+    </Key>
+    <Property Name="PointageID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Jour" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="HeureEntree" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="HeureSortie" Type="Time" Nullable="false" Precision="7" />
+    <Property Name="EmployesID" Type="Int64" />
+    <NavigationProperty Name="Employes" Relationship="Self.FK_Pointage_Employes" FromRole="Pointage" ToRole="Employes" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Pointage_Employes">
+    <End Role="Employes" Type="Self.Employes" Multiplicity="0..1" />
+    <End Role="Pointage" Type="Self.Pointage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employes">
+        <PropertyRef Name="EmployeID" />
+      </Principal>
+      <Dependent Role="Pointage">
+        <PropertyRef Name="EmployesID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PointisEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Connexion" EntityType="Self.Connexion" />
+    <EntitySet Name="Employes" EntityType="Self.Employes" />
+    <EntitySet Name="Pointage" EntityType="Self.Pointage" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK_Pointage_Employes" Association="Self.FK_Pointage_Employes">
+      <End Role="Employes" EntitySet="Employes" />
+      <End Role="Pointage" EntitySet="Pointage" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
